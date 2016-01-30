@@ -1,5 +1,6 @@
 package com.rusangiza.jean_leman.flipnlearn;
 
+import android.content.Intent;
 import android.support.v7.app.ActionBarActivity;
 import android.app.Activity;
 import android.os.Bundle;
@@ -15,6 +16,26 @@ public class Splash extends Activity {
         this.requestWindowFeature(Window.FEATURE_NO_TITLE);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
+        Thread splashTimer = new Thread(){
+            public void run(){
+                try{
+                    int splashTimer = 0;
+                    while(splashTimer < 5000)
+                    {
+                        sleep(100);
+                        splashTimer = splashTimer +100;
+                    }
+                    startActivity(new Intent("com.rusangiza.jean_leman.flipnlearn.CLEARSCREEN"));
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+
+                finally{
+                    finish();
+                }
+            }
+        };
+        splashTimer.start();
     }
 
 
