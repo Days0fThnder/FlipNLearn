@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    tools:context="com.rusangiza.jean_leman.flipnlearn.instructionMenu"
+    android:background="#ff166fe6">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="Flip N&apos; Learn"
+        android:id="@+id/title"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:textColor="#ff1621"
+        android:gravity="center|center_vertical|center_horizontal" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="Welcome to Flip N&apos; Learn, the app that lets you create your own eFlash cards!"
+        android:id="@+id/welcome_Msg"
+        android:layout_below="@+id/title"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="42dp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="Instructions"
+        android:id="@+id/instuctions_title"
+        android:layout_marginTop="32dp"
+        android:gravity="center|center_vertical|center_horizontal"
+        android:layout_below="@+id/welcome_Msg"
+        android:layout_centerHorizontal="true" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="1. click create &quot;new card deck&quot; to build flash cards."
+        android:id="@+id/step_1"
+        android:layout_below="@+id/instuctions_title"
+        android:layout_centerHorizontal="true" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="2. if you have previously created a deck, click on the &quot;existing decks&quot; to start flipping."
+        android:id="@+id/step_2"
+        android:layout_centerVertical="true"
+        android:layout_centerHorizontal="true" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="CREATE NEW CARD DECK"
+        android:id="@+id/create_new_deck_btn"
+        android:layout_below="@+id/step_2"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="44dp"
+        android:background="#ff1621"
+        android:textColor="#ffffff"
+        android:height="50dp"
+        android:width="500dp" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="EXISTING DECKS"
+        android:id="@+id/existing_deck_btn"
+        android:layout_below="@+id/create_new_deck_btn"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="44dp"
+        android:background="#ff1621"
+        android:textColor="#ffffff"
+        android:height="50dp"
+        android:width="500dp" />
+
+</RelativeLayout>
