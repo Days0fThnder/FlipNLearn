@@ -13,12 +13,20 @@ public class instructionMenu extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_instruction_menu);
         Button createNewCardDeck = (Button) findViewById(R.id.create_new_deck_btn);
+        Button existingDeck = (Button) findViewById(R.id.existing_deck_btn);
         createNewCardDeck.setOnClickListener(new View.OnClickListener() {
              @Override
              public void onClick(View V) {
-                     startActivity(new Intent("com.rusangiza.jean_leman.flipnlearn.create_a_card_front"));
+                     startActivity(new Intent("com.rusangiza.jean_leman.flipnlearn.createCardFront"));
                  }
              }
+        );
+        existingDeck.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View V){
+                    startActivity(new Intent("com.rusangiza.jean_leman.flipnlearn.DeckMenu"));
+                }
+            }
         );
     }
 

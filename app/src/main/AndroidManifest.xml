@@ -21,14 +21,25 @@
             android:label="@string/title_activity_instruction_menu">
             <intent-filter>
                 <action android:name="com.rusangiza.jean_leman.flipnlearn.CLEARSCREEN" />
+
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
         <activity
-            android:name=".create_a_card_front"
+            android:name=".createCardFront"
             android:label="@string/title_activity_create_a_card_front">
             <intent-filter>
-                <action android:name="com.rusangiza.jean_leman.flipnlearn.create_a_card_front"/>
+                <action android:name="com.rusangiza.jean_leman.flipnlearn.createCardFront" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".DeckMenu"
+            android:label="@string/title_activity_deck_menu">
+            <intent-filter>
+                <action android:name="com.rusangiza.jean_leman.flipnlearn.DeckMenu" />
+
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
