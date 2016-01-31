@@ -1,5 +1,6 @@
 package com.rusangiza.jean_leman.flipnlearn;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.app.Activity;
 import android.view.View;
@@ -20,7 +21,12 @@ public class DeckMenu extends Activity {
               finish();
             }
         });
-        //deckBtn.setOnClickListener();
+        deckBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent("com.rusangiza.jean_leman.flipnlearn.Deck"));
+            }
+        });
     }
 
 }
