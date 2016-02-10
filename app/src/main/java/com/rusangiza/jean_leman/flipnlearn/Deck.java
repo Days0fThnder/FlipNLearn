@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.app.Activity;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.GestureDetectorCompat;
+import android.support.v4.view.MotionEventCompat;
 import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.GestureDetector;
@@ -26,22 +27,23 @@ import java.util.Set;
 import util.ActivitySwipeDetector;
 import util.Gesture;
 
-public class Deck extends Activity {
-
-
+public class Deck extends Activity implements GestureDetector.OnGestureListener, GestureDetector.OnDoubleTapListener{
+    private static final String DEBUG_TAG = "Gestures";
+    private GestureDetectorCompat mDetector;
 
     private TextView cardMsg;
     private ArrayList<Question> cards = new ArrayList<Question>();
-    ContentValues values = new ContentValues();
-    private GestureDetectorCompat gestureDetector;
     private RelativeLayout lowestLayout;
     static final String logTag = "Deck";
+    private Gesture gesture;
+    View.OnTouchListener gestureListener;
     private Activity activity;
     static final int MIN_DISTANCE = 100;
     private float downX, downY, upX, upY;
     private int deckSize;
     private int cardSize;
     int current_page = 0;
+    private boolean fliped;
     int current_card;
 
 
@@ -49,129 +51,198 @@ public class Deck extends Activity {
         String q;
         String a;
 
-        Question(String q,String a) {
+        Question(String q, String a) {
             this.q = q;
             this.a = a;
         }
     }
 
     @Override
-    protected void onSaveInstanceState(Bundle outState) {
+    protected void onSaveInstanceState (Bundle outState){
         super.onSaveInstanceState(outState);
 
         outState.putInt("current_page", current_page);
     }
 
-    public ArrayList<Question> buildCard(){
+    public ArrayList<Question> buildCard () {
         cards.add(new Question("Java", "Programming language"));
         cards.add(new Question("2+2", "4"));
         cards.add(new Question("color of the sky", "blue"));
+        cards.add(new Question("color of the sky2", "blue2"));
+        cards.add(new Question("color of the sky3", "blue3"));
+        cards.add(new Question("color of the sky4", "blue4"));
+        cards.add(new Question("color of the sky5", "blue5"));
 
         //setCardMsg(cardMsg);
         //getCardMsg().setText("Swipe for question and answers");
         return cards;
 
     }
-    public void onRightSwipe(){
-        Log.i(logTag, "RightToLeftSwipe!");
-        if(current_page < deckSize ) {
-            cardMsg.setText(cards.get(current_page).q);
-            current_page++;
-        }else{
-            current_page = 0;
-            cardMsg.setText(cards.get(current_page).q);
-            current_page++;
+    public void flipCard() {
+        Log.i(logTag, "flipCard");
+
+        if (!getCardMsg().getText().equals("Swipe for question and answers")) {
+            if (!fliped) {
+                cardMsg.setText(cards.get(current_page).a);
+                fliped = true;
+            } else {
+                cardMsg.setText(cards.get(current_page).q);
+                fliped = false;
+            }
         }
+    }
+
+    public void onRightSwipe() {
+        Log.i(logTag, "LeftToRightSwipe!");
+        if (current_page <= deckSize) {
+            if (getCardMsg().getText().equals("Swipe for question and answers")) {
+                if (!fliped) {
+                    cardMsg.setText(cards.get(current_page).q);
+                    fliped = false;
+                }else{
+                    cardMsg.setText(cards.get(current_page).a);
+                    fliped = true;
+                }
+            } else {
+                if (!fliped) {
+                    cardMsg.setText(cards.get(current_page + 1).q);
+                    current_page++;
+                    fliped = false;
+                }else{
+                    cardMsg.setText(cards.get(current_page + 1).a);
+                    current_page++;
+                    fliped = true;
+                }
+            }
+
+        } else {
+            if(!fliped) {
+                current_page = 0;
+                cardMsg.setText(cards.get(current_page).q);
+            }else{
+                current_page = 0;
+                cardMsg.setText(cards.get(current_page).a);
+            }
+
+        }
+    }
+
+    public void onLeftSwipe() {
+        Log.i(logTag, "RightToLeftSwipe!");
+        if (current_page > 0) {
+            if (!fliped) {
+                cardMsg.setText(cards.get(current_page - 1).q);
+                current_page--;
+            }else{
+                cardMsg.setText(cards.get(current_page - 1).a);
+                current_page--;
+            }
+        } else if (current_page == 0) {
+            if(!fliped) {
+                cardMsg.setText(cards.get(cards.size() - 1).q);
+                current_page = cards.size() - 1;
+            }else{
+                cardMsg.setText(cards.get(cards.size() - 1).a);
+                current_page = cards.size() - 1;;
+            }
+        }
+
+    }
+
+    // Called when the activity is first created.
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_deck);
+        // Instantiate the gesture detector with the
+        // application context and an implementation of
+        // GestureDetector.OnGestureListener
+        mDetector = new GestureDetectorCompat(this,this);
+        // Set the gesture detector as the double tap
+        // listener.
+        mDetector.setOnDoubleTapListener(this);
+        cardMsg = (TextView) findViewById(R.id.textview1);
+        cards = buildCard();
+        deckSize = cards.size() - 2;
+        cardSize = deckSize * 2;
+        getCardMsg().setText("Swipe for question and answers");
     }
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_deck);
-        ScrollView sv = (ScrollView) findViewById(R.id.scrollview1);
-        cardMsg = (TextView) findViewById(R.id.textview1);
-        ActivitySwipeDetector activitySwipeDetector = new ActivitySwipeDetector(this);
-        GestureListener gl = new GestureListener();
-        lowestLayout = (RelativeLayout)this.findViewById(R.id.lowestLayout);
-        lowestLayout.setOnTouchListener(activitySwipeDetector);
-        cards = buildCard();
-        deckSize = cards.size();
-        cardSize = deckSize * 2;
-        getCardMsg().setText("Swipe for question and answers");
+    public boolean onTouchEvent(MotionEvent event){
+        this.mDetector.onTouchEvent(event);
+        // Be sure to call the superclass implementation
+        return super.onTouchEvent(event);
+    }
 
-        sv.setOnTouchListener(new View.OnTouchListener() {
-            public boolean onTouch(View v, MotionEvent event) {
-                switch (event.getAction()) {
-                    case MotionEvent.ACTION_DOWN: {
-                        downX = event.getX();
-                        downY = event.getY();
-                        return true;
-                    }
-                    case MotionEvent.ACTION_UP: {
-                        upX = event.getX();
-                        upY = event.getY();
+    @Override
+    public boolean onDown(MotionEvent event) {
+        Log.i(logTag, "onDown: " + event.toString());
+        return false;
+    }
 
-                        float deltaX = downX - upX;
-                        float deltaY = downY - upY;
-
-                        // swipe horizontal?
-                        if (Math.abs(deltaX) > Math.abs(deltaY)) {
-                            if (Math.abs(deltaX) > MIN_DISTANCE) {
-                                // left or right
-                                if (deltaX > 0) {
-                                    onRightSwipe();
-                                    return true;
-                                }
-                                if (deltaX < 0) {
-                                    //this.onLeftSwipe(); return true;
-                                }
-                            } else {
-                                Log.i(logTag, "Horizontal Swipe was only " + Math.abs(deltaX) + " long, need at least " + MIN_DISTANCE);
-                                return false; // We don't consume the event
-                            }
-                        }
-                        // swipe vertical?
-                        else {
-                            if (Math.abs(deltaY) > MIN_DISTANCE) {
-                                // top or down
-                                if (deltaY < 0) { /*this.onDownSwipe(); return true;*/ }
-                                if (deltaY > 0) { /*this.onUpSwipe(); return true;*/ }
-                            } else {
-                                Log.i(logTag, "Vertical Swipe was only " + Math.abs(deltaX) + " long, need at least " + MIN_DISTANCE);
-                                return false; // We don't consume the event
-                            }
-                        }
-
-                        return true;
-                    }
+    @Override
+    public boolean onFling(MotionEvent event1, MotionEvent event2,
+                           float velocityX, float velocityY) {
+        Log.i(logTag, "onFling: " + event1.toString() + event2.toString());
+        if (Math.abs(velocityX) > Math.abs(velocityY)) {
+            if (Math.abs(velocityX) > MIN_DISTANCE) {
+                // right or left
+                if (velocityX < 0) {
+                    onRightSwipe();
                 }
-                return false;
+                if (velocityX > 0) {
+                    onLeftSwipe();
+                    //this.onLeftSwipe(); return true;
+                }
             }
-        });
-
-
-
+        }
+        return false;
     }
 
-    private class GestureListener extends GestureDetector.SimpleOnGestureListener {
-
-        @Override
-        public boolean onDown(MotionEvent e) {
-            return true;
-        }
-
-        // event when double tap occurs
-        @Override
-        public boolean onDoubleTap(MotionEvent e) {
-            float x = e.getX();
-            float y = e.getY();
-
-            Log.d("Double Tap", "Tapped at: (" + x + "," + y + ")");
-
-            return true;
-
-        }
+    @Override
+    public void onLongPress(MotionEvent event) {
+        Log.i(logTag, "onLongPress: " + event.toString());
     }
+
+    @Override
+    public boolean onScroll(MotionEvent event, MotionEvent e2, float distanceX,
+                            float distanceY) {
+        Log.i(logTag, "onScroll: " + event.toString() + e2.toString());
+        //onRightSwipe();
+        return true;
+    }
+
+    @Override
+    public void onShowPress(MotionEvent event) {
+        Log.i(logTag, "onShowPress: " + event.toString());
+    }
+
+    @Override
+    public boolean onSingleTapUp(MotionEvent event) {
+        Log.i(logTag, "onSingleTapUp: " + event.toString());
+        flipCard();
+        return false;
+    }
+
+    @Override
+    public boolean onDoubleTap(MotionEvent event) {
+        Log.i(logTag, "onDoubleTap: " + event.toString());
+        return false;
+    }
+
+    @Override
+    public boolean onDoubleTapEvent(MotionEvent event) {
+        Log.i(logTag, "onDoubleTapEvent: " + event.toString());
+        return false;
+    }
+
+    @Override
+    public boolean onSingleTapConfirmed(MotionEvent event) {
+        Log.i(logTag, "onSingleTapConfirmed: " + event.toString());
+        return false;
+    }
+
 
     public TextView getCardMsg() {
         return cardMsg;
@@ -182,3 +253,4 @@ public class Deck extends Activity {
     }
 
 }
+

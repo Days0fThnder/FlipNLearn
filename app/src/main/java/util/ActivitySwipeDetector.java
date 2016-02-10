@@ -1,6 +1,7 @@
 package util;
 
 import android.app.Activity;
+import android.content.ContentValues;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
@@ -25,17 +26,13 @@ public class ActivitySwipeDetector implements View.OnTouchListener {
 
     public void onRightSwipe(){
         Log.i(logTag, "RightToLeftSwipe!");
-        //activity.doSomething();
+        if (activity.getTitle().equals("Deck")){
+
+        }
     }
 
     public void onLeftSwipe(){
         Log.i(logTag, "LeftToRightSwipe!");
-        if (activity.getTitle().equals("Deck")){
-            TextView cardMsg = (TextView)activity.findViewById(R.id.textview1);
-            cardMsg.setText("java");
-        }
-
-
     }
 
     public void onDownSwipe(){
