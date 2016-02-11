@@ -1,14 +1,9 @@
 package util;
 
 import android.app.Activity;
-import android.content.ContentValues;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
-import android.widget.TextView;
-
-import com.rusangiza.jean_leman.flipnlearn.Deck;
-import com.rusangiza.jean_leman.flipnlearn.R;
 
 /**
  * Created by Jean-Leman on 1/31/2016.
@@ -26,7 +21,7 @@ public class ActivitySwipeDetector implements View.OnTouchListener {
 
     public void onRightSwipe(){
         Log.i(logTag, "RightToLeftSwipe!");
-        if (activity.getTitle().equals("Deck")){
+        if (activity.getTitle().equals("CardFlip")){
 
         }
     }

@@ -24,7 +24,7 @@ public class DeckMenu extends Activity {
         deckBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent("com.rusangiza.jean_leman.flipnlearn.Deck"));
+                startActivity(new Intent("com.rusangiza.jean_leman.flipnlearn.CardFlip"));
             }
         });
     }
