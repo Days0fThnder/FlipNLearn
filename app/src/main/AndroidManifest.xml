@@ -45,7 +45,8 @@
         </activity>
         <activity
             android:name=".CardFlip"
-            android:label="@string/title_activity_deck">
+            android:label="@string/title_activity_deck"
+            android:configChanges="orientation">
             <intent-filter>
                 <action android:name="com.rusangiza.jean_leman.flipnlearn.CardFlip" />
 
