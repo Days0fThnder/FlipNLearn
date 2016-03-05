@@ -1,8 +1,6 @@
 package com.rusangiza.jean_leman.flipnlearn;
 
 import android.app.Fragment;
-import android.content.Intent;
-import android.content.res.Configuration;
 import android.os.Bundle;
 import android.app.Activity;
 import android.support.v4.view.GestureDetectorCompat;
@@ -17,6 +15,7 @@ import android.widget.TextView;
 
 import util.DataStorage;
 import util.Deck;
+import util.MoveCard;
 
 public class CardFlip extends Activity implements GestureDetector.OnGestureListener, GestureDetector.OnDoubleTapListener{
     private static final String DEBUG_TAG = "Gestures";
@@ -27,7 +26,8 @@ public class CardFlip extends Activity implements GestureDetector.OnGestureListe
     private boolean flipped = false;
     private Deck deck = new Deck();
     static final int MIN_DISTANCE = 100;
-    public static CardFrontFragment cardFrontFragment;
+    private static CardFrontFragment cardFrontFragment;
+    private static  CardBackFragment cardBackFragment;
 
     @Override
     protected void onSaveInstanceState (Bundle outState){
@@ -36,34 +36,13 @@ public class CardFlip extends Activity implements GestureDetector.OnGestureListe
         outState.putInt("current_page", current_page);
     }
 
-    public void onLeftSwipe(Deck deck) {
-        Log.i(logTag, "RightToLeftSwipe!");
-        if (current_page > 0) {
-            if (!flipped) {
-                deck.getCardMsg().setText(deck.getCards().get(current_page - 1).q);
-                current_page--;
-            }else{
-                deck.getCardMsg().setText(deck.getCards().get(current_page - 1).a);
-                current_page--;
-            }
-        } else if (current_page == 0) {
-            if(!flipped) {
-                deck.getCardMsg().setText(deck.getCards().get(deck.getCards().size() - 1).q);
-                current_page = deck.getCards().size() - 1;
-            }else{
-                deck.getCardMsg().setText(deck.getCards().get(deck.getCards().size() - 1).a);
-                current_page = deck.getCards().size() - 1;
-            }
-        }
-
-    }
-
     /**
      * A fragment representing the front of the card.
      */
     public static class CardFrontFragment extends Fragment {
         private TextView cardTxt;
         public Deck deck = new Deck();
+        public MoveCard mc = new MoveCard();
         private int deckSize;
         int current_page = 0;
         private boolean flipped = false;
@@ -93,41 +72,11 @@ public class CardFlip extends Activity implements GestureDetector.OnGestureListe
         }
 
         public void onRightSwipe() {
-            Log.i(logTag, "RightToLeftSwipe!");
-            if(DataStorage.getInstance().storage.get("current_page") != null)
-                current_page = (int)DataStorage.getInstance().storage.get("current_page");
-            if (current_page <= deck.getCardSize()) {
-                if (deck.getCardMsg().getText().equals("Swipe for question and answers")) {
-                    if (!flipped) {
-                        deck.getCardMsg().setText(deck.getCards().get(current_page).q);
-                        flipped = false;
-                    }else{
-                        deck.getCardMsg().setText(deck.getCards().get(current_page).a);
-                        flipped = true;
-                    }
-                } else {
-                    if (!flipped) {
-                        deck.getCardMsg().setText(deck.getCards().get(current_page + 1).q);
-                        current_page++;
-                        flipped = false;
-                    }else{
-                        deck.getCardMsg().setText(deck.getCards().get(current_page + 1).a);
-                        current_page++;
-                        flipped = true;
-                    }
-                }
+            mc.onRightSwipe(current_page, deck, flipped);
+        }
 
-            } else {
-                if(!flipped) {
-                    current_page = 0;
-                    deck.getCardMsg().setText(deck.getCards().get(current_page).q);
-                }else{
-                    current_page = 0;
-                    deck.getCardMsg().setText(deck.getCards().get(current_page).a);
-                }
-
-            }
-            DataStorage.getInstance().storage.put("current_page", current_page);
+        public void onLeftSwipe() {
+            mc.onLeftSwipe(current_page, deck, flipped);
         }
     }
 
@@ -135,13 +84,39 @@ public class CardFlip extends Activity implements GestureDetector.OnGestureListe
      * A fragment representing the back of the card.
      */
     public static class CardBackFragment extends Fragment {
+        private TextView cardTxt;
+        public Deck deck = new Deck();
+        public MoveCard mc = new MoveCard();
+        private int deckSize;
+        int current_page = 0;
+        private boolean flipped = false;
+
         public CardBackFragment() {
+            setRetainInstance(true);
         }
 
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
                                  Bundle savedInstanceState) {
-            return inflater.inflate(R.layout.fragment_card_back, container, false);
+            View cardFace = inflater.inflate(R.layout.fragment_card_back, container, false);
+            cardTxt = (TextView) cardFace.findViewById(R.id.textview1);
+            deck.setCardMsg(cardTxt);
+            deck.setCards(deck.buildCard());
+            deckSize = deck.getCards().size() - 2;
+            deck.setCardSize(deckSize * 2);
+            if(DataStorage.getInstance().storage.get("current_page") != null) {
+                current_page = (int)DataStorage.getInstance().storage.get("current_page");
+                deck.getCardMsg().setText(deck.getCards().get(current_page).a);
+            }
+            return cardFace;
+        }
+
+        public void onRightSwipe() {
+            mc.onRightSwipe(current_page, deck, flipped);
+        }
+
+        public void onLeftSwipe() {
+            mc.onLeftSwipe(current_page, deck, flipped);
         }
     }
     private void flipCard() {
@@ -155,12 +130,18 @@ public class CardFlip extends Activity implements GestureDetector.OnGestureListe
 
                     ).replace(R.id.container, getCardFrontFragment()).addToBackStack(null).commit();
             flipped = false;
+            DataStorage.getInstance().storage.put("flipped", flipped);
             return;
         }
 
         // Flip to the back.
 
         flipped = true;
+        DataStorage.getInstance().storage.put("flipped", flipped);
+
+        if(cardBackFragment == null){
+            cardBackFragment = new CardBackFragment();
+        }
 
         // Create and commit a new fragment transaction that adds the fragment for
         // the back of the card, uses custom animations, and is part of the fragment
@@ -182,7 +163,7 @@ public class CardFlip extends Activity implements GestureDetector.OnGestureListe
                         // Replace any fragments currently in the container view with a
                         // fragment representing the next page (indicated by the
                         // just-incremented currentPage variable).
-                .replace(R.id.container, new CardBackFragment())
+                .replace(R.id.container, cardBackFragment)
 
                         // Add this transaction to the back stack, allowing users to press
                         // Back to get to the front of the card.
@@ -205,13 +186,11 @@ public class CardFlip extends Activity implements GestureDetector.OnGestureListe
             cardFrontFragment = new CardFrontFragment();
             getFragmentManager()
                     .beginTransaction()
-                    .add(R.id.container, cardFrontFragment, "TEST_TAG")
+                    .add(R.id.container, cardFrontFragment, "FRONT_TAG")
                     .commit();
         } else {
-            cardFrontFragment = (CardFrontFragment) getFragmentManager().findFragmentByTag("TEST_TAG");
+            cardFrontFragment = (CardFrontFragment) getFragmentManager().findFragmentByTag("FRONT_TAG");
         }
-
-
 
         // Monitor back stack changes to ensure the action bar shows the appropriate
         // button (either "photo" or "info").
@@ -223,7 +202,6 @@ public class CardFlip extends Activity implements GestureDetector.OnGestureListe
         // Set the gesture detector as the double tap
         // listener.
         mDetector.setOnDoubleTapListener(this);
-
 
     }
 
@@ -248,11 +226,18 @@ public class CardFlip extends Activity implements GestureDetector.OnGestureListe
             if (Math.abs(velocityX) > MIN_DISTANCE) {
                 // right or left
                 if (velocityX < 0) {
-                    getCardFrontFragment().onRightSwipe();
+                    if(!flipped) {
+                        getCardFrontFragment().onRightSwipe();
+                    }else{
+                        getCardBackFragment().onRightSwipe();
+                    }
                 }
                 if (velocityX > 0) {
-                    //onLeftSwipe(deck);
-                    //this.onLeftSwipe(); return true;
+                    if(!flipped) {
+                        getCardFrontFragment().onLeftSwipe();
+                    }else{
+                        getCardBackFragment().onLeftSwipe();
+                    }
                 }
             }
         }
@@ -280,7 +265,8 @@ public class CardFlip extends Activity implements GestureDetector.OnGestureListe
     @Override
     public boolean onSingleTapUp(MotionEvent event) {
         Log.i(logTag, "onSingleTapUp: " + event.toString());
-        flipCard();
+        if(DataStorage.getInstance().storage.get("current_page") != null)
+            flipCard();
         return false;
     }
 
@@ -308,6 +294,14 @@ public class CardFlip extends Activity implements GestureDetector.OnGestureListe
 
     public void setCardFrontFragment(CardFrontFragment cardFrontFragment) {
         this.cardFrontFragment = cardFrontFragment;
+    }
+
+    public static CardBackFragment getCardBackFragment() {
+        return cardBackFragment;
+    }
+
+    public static void setCardBackFragment(CardBackFragment cardBackFragment) {
+        CardFlip.cardBackFragment = cardBackFragment;
     }
 
 
