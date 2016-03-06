@@ -34,20 +34,8 @@
         <Button
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:text="Deck 1"
-            android:id="@+id/button_1"
-            android:background="#ff1621"
-            android:width="300dp"
-            android:layout_marginTop="36dp"
-            android:layout_below="@+id/deck_count_lbel"
-            android:layout_centerHorizontal="true"
-            android:height="50dp"
-            android:textColor="#fffefe" />
-        <Button
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
             android:text="Deck 2"
-            android:id="@+id/button_2"
+            android:id="@+id/deck_2"
             android:background="#ff1621"
             android:width="300dp"
             android:layout_marginTop="36dp"

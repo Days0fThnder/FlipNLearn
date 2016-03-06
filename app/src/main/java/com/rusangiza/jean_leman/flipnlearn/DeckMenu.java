@@ -11,20 +11,33 @@ public class DeckMenu extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        final Bundle bundle = new Bundle();
         setContentView(R.layout.activity_deck_menu);
         Button homeBtn = (Button)findViewById(R.id.home_menu_btn);
-        Button deckBtn = (Button)findViewById(R.id.deck_1);
+        Button deckBtn1 = (Button)findViewById(R.id.deck_1);
+        Button deckBtn2 = (Button)findViewById(R.id.deck_2);
+        final Intent i = new Intent(this, CardFlip.class);
         homeBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
-              finish();
+                finish();
             }
         });
-        deckBtn.setOnClickListener(new View.OnClickListener() {
+        deckBtn1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent("com.rusangiza.jean_leman.flipnlearn.CardFlip"));
+                bundle.putString("deck","deck1");
+                i.putExtras(bundle);
+                startActivity(i);
+            }
+        });
+        deckBtn2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                bundle.putString("deck","deck2");
+                i.putExtras(bundle);
+                startActivity(i);
             }
         });
     }

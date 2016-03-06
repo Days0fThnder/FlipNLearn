@@ -27,7 +27,8 @@ public class CardFlip extends Activity implements GestureDetector.OnGestureListe
     private Deck deck = new Deck();
     static final int MIN_DISTANCE = 100;
     private static CardFrontFragment cardFrontFragment;
-    private static  CardBackFragment cardBackFragment;
+    private static CardBackFragment cardBackFragment;
+    private static String deckName;
 
     @Override
     protected void onSaveInstanceState (Bundle outState){
@@ -35,6 +36,41 @@ public class CardFlip extends Activity implements GestureDetector.OnGestureListe
 
         outState.putInt("current_page", current_page);
     }
+
+    // Called when the activity is first created.
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_card_flip);
+        Bundle bundle = getIntent().getExtras();
+        deckName = bundle.getString("deck");
+
+        if (savedInstanceState == null) {
+            // If there is no saved instance state, add a fragment representing the
+            // front of the card to this activity. If there is saved instance state,
+            // this fragment will have already been added to the activity.
+            cardFrontFragment = new CardFrontFragment();
+            getFragmentManager()
+                    .beginTransaction()
+                    .add(R.id.container, cardFrontFragment, "FRONT_TAG")
+                    .commit();
+        } else {
+            cardFrontFragment = (CardFrontFragment) getFragmentManager().findFragmentByTag("FRONT_TAG");
+        }
+
+        // Monitor back stack changes to ensure the action bar shows the appropriate
+        // button (either "photo" or "info").
+        //getFragmentManager().addOnBackStackChangedListener(this);
+        // Instantiate the gesture detector with the
+        // application context and an implementation of
+        // GestureDetector.OnGestureListener
+        mDetector = new GestureDetectorCompat(this,this);
+        // Set the gesture detector as the double tap
+        // listener.
+        mDetector.setOnDoubleTapListener(this);
+
+    }
+
 
     /**
      * A fragment representing the front of the card.
@@ -46,6 +82,7 @@ public class CardFlip extends Activity implements GestureDetector.OnGestureListe
         private int deckSize;
         int current_page = 0;
         private boolean flipped = false;
+        String deckId = CardFlip.deckName;
 
         public CardFrontFragment() {
             setRetainInstance(true);
@@ -57,7 +94,7 @@ public class CardFlip extends Activity implements GestureDetector.OnGestureListe
             View cardFace = inflater.inflate(R.layout.fragment_card_front, container, false);
             cardTxt = (TextView) cardFace.findViewById(R.id.textView);
             deck.setCardMsg(cardTxt);
-            deck.setCards(deck.buildCard());
+            deck.setCards(deck.buildCard(deckId));
             deckSize = deck.getCards().size() - 2;
             deck.setCardSize(deckSize * 2);
             if(DataStorage.getInstance().storage.get("current_page") != null) {
@@ -90,6 +127,7 @@ public class CardFlip extends Activity implements GestureDetector.OnGestureListe
         private int deckSize;
         int current_page = 0;
         private boolean flipped = false;
+        String deckId = CardFlip.deckName;
 
         public CardBackFragment() {
             setRetainInstance(true);
@@ -101,7 +139,7 @@ public class CardFlip extends Activity implements GestureDetector.OnGestureListe
             View cardFace = inflater.inflate(R.layout.fragment_card_back, container, false);
             cardTxt = (TextView) cardFace.findViewById(R.id.textview1);
             deck.setCardMsg(cardTxt);
-            deck.setCards(deck.buildCard());
+            deck.setCards(deck.buildCard(deckId));
             deckSize = deck.getCards().size() - 2;
             deck.setCardSize(deckSize * 2);
             if(DataStorage.getInstance().storage.get("current_page") != null) {
@@ -171,38 +209,6 @@ public class CardFlip extends Activity implements GestureDetector.OnGestureListe
 
                         // Commit the transaction.
                 .commit();
-    }
-
-    // Called when the activity is first created.
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_card_flip);
-
-        if (savedInstanceState == null) {
-            // If there is no saved instance state, add a fragment representing the
-            // front of the card to this activity. If there is saved instance state,
-            // this fragment will have already been added to the activity.
-            cardFrontFragment = new CardFrontFragment();
-            getFragmentManager()
-                    .beginTransaction()
-                    .add(R.id.container, cardFrontFragment, "FRONT_TAG")
-                    .commit();
-        } else {
-            cardFrontFragment = (CardFrontFragment) getFragmentManager().findFragmentByTag("FRONT_TAG");
-        }
-
-        // Monitor back stack changes to ensure the action bar shows the appropriate
-        // button (either "photo" or "info").
-        //getFragmentManager().addOnBackStackChangedListener(this);
-        // Instantiate the gesture detector with the
-        // application context and an implementation of
-        // GestureDetector.OnGestureListener
-        mDetector = new GestureDetectorCompat(this,this);
-        // Set the gesture detector as the double tap
-        // listener.
-        mDetector.setOnDoubleTapListener(this);
-
     }
 
     @Override
@@ -294,6 +300,14 @@ public class CardFlip extends Activity implements GestureDetector.OnGestureListe
 
     public void setCardFrontFragment(CardFrontFragment cardFrontFragment) {
         this.cardFrontFragment = cardFrontFragment;
+    }
+
+    public static String getDeckName() {
+        return deckName;
+    }
+
+    public static void setDeckName(String deckName) {
+        CardFlip.deckName = deckName;
     }
 
     public static CardBackFragment getCardBackFragment() {
