@@ -16,6 +16,10 @@ public class DeckMenu extends Activity {
         Button homeBtn = (Button)findViewById(R.id.home_menu_btn);
         Button deckBtn1 = (Button)findViewById(R.id.deck_1);
         Button deckBtn2 = (Button)findViewById(R.id.deck_2);
+        Button deckBtn3 = (Button)findViewById(R.id.deck_3);
+        Button deckBtn4 = (Button)findViewById(R.id.deck_4);
+        Button deckBtn5 = (Button)findViewById(R.id.deck_5);
+        Button deckBtn6 = (Button)findViewById(R.id.deck_6);
         final Intent i = new Intent(this, CardFlip.class);
         homeBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -36,6 +40,38 @@ public class DeckMenu extends Activity {
             @Override
             public void onClick(View v) {
                 bundle.putString("deck","deck2");
+                i.putExtras(bundle);
+                startActivity(i);
+            }
+        });
+        deckBtn3.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                bundle.putString("deck","deck3");
+                i.putExtras(bundle);
+                startActivity(i);
+            }
+        });
+        deckBtn4.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                bundle.putString("deck","deck4");
+                i.putExtras(bundle);
+                startActivity(i);
+            }
+        });
+        deckBtn5.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                bundle.putString("deck","deck5");
+                i.putExtras(bundle);
+                startActivity(i);
+            }
+        });
+        deckBtn6.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                bundle.putString("deck","deck6");
                 i.putExtras(bundle);
                 startActivity(i);
             }

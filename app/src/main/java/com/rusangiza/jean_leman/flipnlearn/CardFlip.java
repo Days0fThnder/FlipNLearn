@@ -1,6 +1,7 @@
 package com.rusangiza.jean_leman.flipnlearn;
 
 import android.app.Fragment;
+import android.content.Intent;
 import android.os.Bundle;
 import android.app.Activity;
 import android.support.v4.view.GestureDetectorCompat;
@@ -10,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 
 
@@ -69,14 +71,15 @@ public class CardFlip extends Activity implements GestureDetector.OnGestureListe
         // listener.
         mDetector.setOnDoubleTapListener(this);
 
-    }
 
+    }
 
     /**
      * A fragment representing the front of the card.
      */
     public static class CardFrontFragment extends Fragment {
         private TextView cardTxt;
+        private TextView deckName;
         public Deck deck = new Deck();
         public MoveCard mc = new MoveCard();
         private int deckSize;
@@ -93,18 +96,33 @@ public class CardFlip extends Activity implements GestureDetector.OnGestureListe
                                  Bundle savedInstanceState) {
             View cardFace = inflater.inflate(R.layout.fragment_card_front, container, false);
             cardTxt = (TextView) cardFace.findViewById(R.id.textView);
+            deckName = (TextView) cardFace.findViewById(R.id.deckId);
+            Button deckMenuBtn = (Button)cardFace.findViewById(R.id.deckMenuBnt);
+
+            deckName.setText(deckId);
             deck.setCardMsg(cardTxt);
             deck.setCards(deck.buildCard(deckId));
             deckSize = deck.getCards().size() - 2;
             deck.setCardSize(deckSize * 2);
             if(DataStorage.getInstance().storage.get("current_page") != null) {
                 current_page = (int)DataStorage.getInstance().storage.get("current_page");
-                deck.getCardMsg().setText(deck.getCards().get(current_page).q);
+                if(current_page < deck.getCards().size()) {
+                    deck.getCardMsg().setText(deck.getCards().get(current_page).q);
+                }else{
+                    current_page = 0;
+                    deck.getCardMsg().setText(deck.getCards().get(current_page).q);
+                }
             }
             else{
                 deck.getCardMsg().setText("Swipe for question and answers");
             }
-
+            deckMenuBtn.setOnClickListener(new View.OnClickListener(){
+                @Override
+                public void onClick(View v){
+                    DataStorage.getInstance().storage.clear();
+                    getActivity().finish();
+                }
+            });
             return cardFace;
         }
 
@@ -122,6 +140,7 @@ public class CardFlip extends Activity implements GestureDetector.OnGestureListe
      */
     public static class CardBackFragment extends Fragment {
         private TextView cardTxt;
+        private TextView deckName;
         public Deck deck = new Deck();
         public MoveCard mc = new MoveCard();
         private int deckSize;
@@ -137,15 +156,32 @@ public class CardFlip extends Activity implements GestureDetector.OnGestureListe
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
                                  Bundle savedInstanceState) {
             View cardFace = inflater.inflate(R.layout.fragment_card_back, container, false);
-            cardTxt = (TextView) cardFace.findViewById(R.id.textview1);
+            cardTxt = (TextView) cardFace.findViewById(R.id.answer);
+            deckName = (TextView) cardFace.findViewById(R.id.deckId);
+            Button deckMenuBtn = (Button)cardFace.findViewById(R.id.deckMenuBnt);
+
+            deckName.setText(deckId);
             deck.setCardMsg(cardTxt);
             deck.setCards(deck.buildCard(deckId));
             deckSize = deck.getCards().size() - 2;
             deck.setCardSize(deckSize * 2);
             if(DataStorage.getInstance().storage.get("current_page") != null) {
                 current_page = (int)DataStorage.getInstance().storage.get("current_page");
-                deck.getCardMsg().setText(deck.getCards().get(current_page).a);
+                if(current_page < deck.getCards().size()) {
+                    deck.getCardMsg().setText(deck.getCards().get(current_page).a);
+                }else{
+                    current_page = 0;
+                    deck.getCardMsg().setText(deck.getCards().get(current_page).a);
+                }
             }
+           deckMenuBtn.setOnClickListener(new View.OnClickListener() {
+               @Override
+               public void onClick(View v) {
+                   DataStorage.getInstance().storage.clear();
+                   getActivity().finish();
+               }
+           });
+
             return cardFace;
         }
 
@@ -178,6 +214,8 @@ public class CardFlip extends Activity implements GestureDetector.OnGestureListe
         DataStorage.getInstance().storage.put("flipped", flipped);
 
         if(cardBackFragment == null){
+            cardBackFragment = new CardBackFragment();
+        }else if(!cardBackFragment.deckId.equals(CardFlip.deckName)){
             cardBackFragment = new CardBackFragment();
         }
 
@@ -292,6 +330,12 @@ public class CardFlip extends Activity implements GestureDetector.OnGestureListe
     public boolean onSingleTapConfirmed(MotionEvent event) {
         Log.i(logTag, "onSingleTapConfirmed: " + event.toString());
         return false;
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        this.finish();
     }
 
     public CardFrontFragment getCardFrontFragment() {

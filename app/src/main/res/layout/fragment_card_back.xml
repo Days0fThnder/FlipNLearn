@@ -16,11 +16,31 @@ tools:context=".CardFlip"
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:text="Large Text"
         android:textStyle="bold"
-        android:id="@+id/textview1"
+        android:id="@+id/answer"
         android:layout_centerVertical="true"
         android:layout_centerHorizontal="true"
         android:textColor="#020202"
         style="@android:style/TextAppearance.Large" />
+
+    <Button
+        style="?android:attr/buttonStyleSmall"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Deck Menu"
+        android:id="@+id/deckMenuBnt"
+        android:textColor="#ffffff"
+        android:background="#ff1621"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:text="Small Text"
+        android:id="@+id/deckId"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true" />
 
 
 </RelativeLayout>
