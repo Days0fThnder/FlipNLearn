@@ -20,6 +20,9 @@ public class DeckMenu extends Activity {
         Button deckBtn4 = (Button)findViewById(R.id.deck_4);
         Button deckBtn5 = (Button)findViewById(R.id.deck_5);
         Button deckBtn6 = (Button)findViewById(R.id.deck_6);
+        Button deckBtn7 = (Button)findViewById(R.id.deck_7);
+        Button deckBtn8 = (Button)findViewById(R.id.deck_8);
+        Button deckBtn9 = (Button)findViewById(R.id.deck_9);
         final Intent i = new Intent(this, CardFlip.class);
         homeBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -72,6 +75,30 @@ public class DeckMenu extends Activity {
             @Override
             public void onClick(View v) {
                 bundle.putString("deck","deck6");
+                i.putExtras(bundle);
+                startActivity(i);
+            }
+        });
+        deckBtn7.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                bundle.putString("deck","deck7");
+                i.putExtras(bundle);
+                startActivity(i);
+            }
+        });
+        deckBtn8.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                bundle.putString("deck","deck8");
+                i.putExtras(bundle);
+                startActivity(i);
+            }
+        });
+        deckBtn9.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                bundle.putString("deck","deck9");
                 i.putExtras(bundle);
                 startActivity(i);
             }
