@@ -1,64 +1,77 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.rusangiza.jean_leman.flipnlearn">
+          package="com.rusangiza.jean_leman.flipnlearn">
 
     <application
-        android:allowBackup="true"
-        android:icon="@mipmap/ic_launcher"
-        android:label="@string/app_name"
-        android:theme="@android:style/Theme.NoTitleBar">
+            android:allowBackup="true"
+            android:icon="@mipmap/ic_launcher"
+            android:label="@string/app_name"
+            android:theme="@android:style/Theme.NoTitleBar">
         <activity
-            android:name=".Splash"
-            android:label="@string/app_name">
+                android:name=".Splash"
+                android:label="@string/app_name">
             <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
+                <action android:name="android.intent.action.MAIN"/>
 
-                <category android:name="android.intent.category.LAUNCHER" />
+                <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
         <activity
-            android:name=".instructionMenu"
-            android:label="@string/title_activity_instruction_menu">
+                android:name=".InstructionMenu"
+                android:label="@string/title_activity_instruction_menu">
             <intent-filter>
-                <action android:name="com.rusangiza.jean_leman.flipnlearn.CLEARSCREEN" />
+                <action android:name="com.rusangiza.jean_leman.flipnlearn.CLEARSCREEN"/>
 
-                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.DEFAULT"/>
             </intent-filter>
         </activity>
         <activity
-            android:name=".createCardFront"
-            android:label="@string/title_activity_create_a_card_front">
+                android:name=".CreateCardFront"
+                android:label="@string/title_activity_create_a_card_front"
+                android:windowSoftInputMode="adjustResize|stateHidden" >>
             <intent-filter>
-                <action android:name="com.rusangiza.jean_leman.flipnlearn.createCardFront" />
+                <action android:name="com.rusangiza.jean_leman.flipnlearn.CreateCardFront"/>
 
-                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.DEFAULT"/>
             </intent-filter>
         </activity>
         <activity
-            android:name=".DeckMenu"
-            android:label="@string/title_activity_deck_menu">
+                android:name=".DeckMenu"
+                android:label="@string/title_activity_deck_menu">
             <intent-filter>
-                <action android:name="com.rusangiza.jean_leman.flipnlearn.DeckMenu" />
+                <action android:name="com.rusangiza.jean_leman.flipnlearn.DeckMenu"/>
 
-                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.DEFAULT"/>
             </intent-filter>
         </activity>
         <activity
-            android:name=".CardFlip"
-            android:label="@string/title_activity_deck"
-            android:configChanges="orientation">
+                android:name=".CardFlip"
+                android:configChanges="orientation"
+                android:label="@string/title_activity_deck">
             <intent-filter>
-                <action android:name="com.rusangiza.jean_leman.flipnlearn.CardFlip" />
+                <action android:name="com.rusangiza.jean_leman.flipnlearn.CardFlip"/>
 
-                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.DEFAULT"/>
             </intent-filter>
         </activity>
-        <!-- ATTENTION: This was auto-generated to add Google Play services to your project for
-             App Indexing.  See https://g.co/AppIndexing/AndroidStudio for more information. -->
+        <activity
+                android:name=".FrontCardPreview"
+                android:configChanges="orientation"
+                android:label="FrontCardPreview"
+                android:theme="@style/AppTheme.CustomTheme">
+            <intent-filter>
+                <action android:name="com.rusangiza.jean_leman.flipnlearn.FrontCardPreview"/>
+
+                <category android:name="android.intent.category.DEFAULT"/>
+            </intent-filter>
+        </activity>
+        <!--
+             ATTENTION: This was auto-generated to add Google Play services to your project for
+             App Indexing.  See https://g.co/AppIndexing/AndroidStudio for more information.
+        -->
         <meta-data
-            android:name="com.google.android.gms.version"
-            android:value="@integer/google_play_services_version" />
-
+                android:name="com.google.android.gms.version"
+                android:value="@integer/google_play_services_version"/>
 
     </application>
 
