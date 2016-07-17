@@ -8,26 +8,26 @@
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceLarge"
             android:text="Large Text"
-            android:id="@+id/preview_text" android:layout_centerVertical="true" android:layout_centerHorizontal="true"
+            android:id="@+id/preview_back_text" android:layout_centerVertical="true" android:layout_centerHorizontal="true"
             android:textColor="#020202"/>
     <Button
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Cancel"
-            android:id="@+id/cancel_card"
+            android:id="@+id/cancel_back_card"
             android:background="#ff1621"
             android:height="50dp"
             android:width="200dp"
             android:layout_alignParentBottom="true"
-            android:layout_toStartOf="@+id/preview_text" android:textColor="#ffffff"/>
+            android:layout_toStartOf="@+id/preview_back_text" android:textColor="#ffffff"/>
     <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Add Text"
-            android:id="@+id/add_front_card_text"
+            android:id="@+id/add_back_card_text"
             android:layout_alignParentBottom="true"
             android:layout_alignParentEnd="true"
             android:height="50dp"
             android:width="200dp"
-            android:background="#ff1621" android:textColor="#ffff" android:layout_toEndOf="@+id/preview_text"/>
+            android:background="#ff1621" android:textColor="#ffff" android:layout_toEndOf="@+id/preview_back_text"/>
 </RelativeLayout>

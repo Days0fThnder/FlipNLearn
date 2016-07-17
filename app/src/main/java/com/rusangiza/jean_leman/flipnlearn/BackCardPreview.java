@@ -1,10 +1,8 @@
 package com.rusangiza.jean_leman.flipnlearn;
 
 import android.app.Activity;
-import android.content.Intent;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -14,8 +12,8 @@ import util.Deck;
 /**
  * Created by j_rus on 5/30/2016.
  */
-public class FrontCardPreview extends Activity{
-    private TextView frontText;
+public class BackCardPreview extends Activity{
+    private TextView backText;
     private Button cancel;
     private Button addText;
     private Deck cardDeck = new Deck();
@@ -23,16 +21,14 @@ public class FrontCardPreview extends Activity{
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        final Bundle bundle = getIntent().getExtras();
-        final Intent i = new Intent(this, CreateCardBack.class);
-        setContentView(R.layout.front_card_preview);
 
-        frontText = (TextView) findViewById(R.id.preview_text);
-        addText = (Button) findViewById(R.id.add_front_card_text);
-        cancel = (Button) findViewById(R.id.cancel_card);
+        setContentView(R.layout.back_card_preview);
+        backText = (TextView) findViewById(R.id.preview_back_text);
+        addText = (Button) findViewById(R.id.add_back_card_text);
+        cancel = (Button) findViewById(R.id.cancel_back_card);
 
-        //Bundle bundle = getIntent().getExtras();
-        frontText.setText(bundle.getString("front_Card value"));
+        Bundle bundle = getIntent().getExtras();
+        backText.setText(bundle.getString("back_Card value"));
 
         DisplayMetrics dm = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(dm);
@@ -52,9 +48,6 @@ public class FrontCardPreview extends Activity{
             @Override
             public void onClick(View v){
                 //cardDeck.getCards().add(new Card(frontText.getText().toString(), null));
-                //bundle.putString("_Card value", frontText.getText().toString());
-                i.putExtras(bundle);
-                startActivity(i);
 
             }
         });

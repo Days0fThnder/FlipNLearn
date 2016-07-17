@@ -9,14 +9,17 @@ import java.util.ArrayList;
  */
 public class Deck {
 
-
-
     private TextView cardMsg;
     private ArrayList<Card> cards = new ArrayList<>();
+    private String deckName;
     private int deckSize;
     private int cardSize;
 
 
+    public ArrayList<Card> buildCard (String deckName, ArrayList<Card> cards) {
+        this.deckName = deckName;
+        return this.cards = cards;
+    }
     public ArrayList<Card> buildCard (String deckId) {
         if("deck1".equals(deckId)) {
             cards.add(new Card("Demilitarized Zone(DMZ)", "A lightly protected subnet placed on " +
@@ -464,6 +467,14 @@ public class Deck {
 
     public void setCardSize(int cardSize) {
         this.cardSize = cardSize;
+    }
+
+    public String getDeckName() {
+        return deckName;
+    }
+
+    public void setDeckName(String deckName) {
+        this.deckName = deckName;
     }
 
 

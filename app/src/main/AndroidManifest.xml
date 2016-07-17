@@ -28,9 +28,21 @@
         <activity
                 android:name=".CreateCardFront"
                 android:label="@string/title_activity_create_a_card_front"
-                android:windowSoftInputMode="adjustResize|stateHidden" >>
+                android:windowSoftInputMode="adjustResize|stateHidden">
+            >
             <intent-filter>
                 <action android:name="com.rusangiza.jean_leman.flipnlearn.CreateCardFront"/>
+
+                <category android:name="android.intent.category.DEFAULT"/>
+            </intent-filter>
+        </activity>
+        <activity
+                android:name=".CreateCardBack"
+                android:label="create_a_card_back"
+                android:windowSoftInputMode="adjustResize|stateHidden">
+            >
+            <intent-filter>
+                <action android:name="com.rusangiza.jean_leman.flipnlearn.CreateCardBack"/>
 
                 <category android:name="android.intent.category.DEFAULT"/>
             </intent-filter>
@@ -65,6 +77,18 @@
                 <category android:name="android.intent.category.DEFAULT"/>
             </intent-filter>
         </activity>
+        <activity
+                android:name=".BackCardPreview"
+                android:configChanges="orientation"
+                android:label="FrontCardPreview"
+                android:theme="@style/AppTheme.CustomTheme">
+            <intent-filter>
+                <action android:name="com.rusangiza.jean_leman.flipnlearn.BackCardPreview"/>
+
+                <category android:name="android.intent.category.DEFAULT"/>
+            </intent-filter>
+        </activity>
+
         <!--
              ATTENTION: This was auto-generated to add Google Play services to your project for
              App Indexing.  See https://g.co/AppIndexing/AndroidStudio for more information.
@@ -73,6 +97,15 @@
                 android:name="com.google.android.gms.version"
                 android:value="@integer/google_play_services_version"/>
 
+        <activity
+                android:name=".CreateDeck"
+                android:label="@string/title_activity_create_deck">
+            <intent-filter>
+                <action android:name="com.rusangiza.jean_leman.flipnlearn.CreateDeck"/>
+
+                <category android:name="android.intent.category.DEFAULT"/>
+            </intent-filter>
+        </activity>
     </application>
 
 </manifest>
